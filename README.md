@@ -1,1 +1,1 @@
-19120022_19120028_BT02
+Implementation of Sobel, Prewitt, Laplace and Canny edge detection
