@@ -1,5 +1,6 @@
 ﻿
 #include "process.h"
+#include "SobelAndPrewitt.h"
 #include "CannyEdgeDetection.h"
 
 int detectByCany(Mat sourceImage, Mat &destinationImage) {
@@ -31,7 +32,7 @@ int main(int argc, char** argv)
 
 		}
 	}
-	else if (argc == 3) 
+	else if (argc == 3)
 	{
 		Mat image = imread(argv[1], IMREAD_COLOR);
 		if (!image.data) {
@@ -39,10 +40,18 @@ int main(int argc, char** argv)
 			return -1;
 		}
 		if (!(strcmp(argv[2], "sob"))) {
-			//do sobel
+			Mat dst;
+			int rst = detectBySobel(image, dst);
+			if (rst) {
+				showImage(dst, "Sobel");
+			}
 		}
 		else if (!(strcmp(argv[2], "pre"))) {
-			//do prewitt
+			Mat dst;
+			int rst = detectByPrewitt(image, dst);
+			if (rst) {
+				showImage(dst, "Prewitt");
+			}
 		}
 		else if (!(strcmp(argv[2], "lap"))) {
 			Mat dst;
@@ -51,7 +60,7 @@ int main(int argc, char** argv)
 				showImage(dst, "Laplace");
 
 		}
-		else if (!(strcmp(argv[2], "canny"))){
+		else if (!(strcmp(argv[2], "canny"))) {
 			Mat dst;
 			int rst = detectByCany(image, dst);
 			if (rst)
@@ -68,19 +77,19 @@ int main(int argc, char** argv)
 		int l = stoi(argv[3]);
 		int h = stoi(argv[4]);
 		Mat image = imread(argv[1], IMREAD_COLOR);
-		if(!(strcmp(argv[2], "canny"))) {
+		if (!(strcmp(argv[2], "canny"))) {
 			Mat dst;
-			int rst = detectByCany(image, dst,l,h);
+			int rst = detectByCany(image, dst, l, h);
 			if (rst)
 				showImage(dst, "Canny");
+		}
+		else {
+			cout << "Cu phap khong hop le";
+
+		}
+
+
+		return 0;
 	}
-	else {
-		cout << "Cu phap khong hop le";
-
-	}
-
-
-	return 0;
 }
-
 
