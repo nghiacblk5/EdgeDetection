@@ -26,7 +26,7 @@ CannyEdgeDetection::CannyEdgeDetection(Mat source) {
 							0,0,0,
 							1,2,1 };
 	// high threshold
-	upper = 175;
+	upper = 70;
 
 	// low threshold
 	lower = 35;
@@ -34,7 +34,28 @@ CannyEdgeDetection::CannyEdgeDetection(Mat source) {
 }
 
 CannyEdgeDetection::CannyEdgeDetection(Mat source, int low_threshold, int high_threshold) {
-	CannyEdgeDetection::CannyEdgeDetection(source);
+	source.copyTo(image);
+	// khởi tạo kernel để thực hiện gaussian blur
+	gaussian_blur_kernelSize = 5;
+	gaussian_kernel = new double[gaussian_blur_kernelSize * gaussian_blur_kernelSize]{
+								2,4,5,4,2,
+								4,9,12,9,4,
+								5,12,15,12,5,
+								4,9,12,9,4,
+								2,4,5,4,2 };
+	for (int i = 0; i < gaussian_blur_kernelSize * gaussian_blur_kernelSize; ++i)
+		gaussian_kernel[i] = gaussian_kernel[i] * 1.0 / 159;
+
+	//khởi tạo mask thực hiện sobel
+	sobel_size = 3;
+	sobel_x = new int[sobel_size * sobel_size]{
+							-1,0,1,
+							-2,0,2,
+							-1,0,1 };
+	sobel_y = new int[sobel_size * sobel_size]{
+							-1,-2,-1,
+							0,0,0,
+							1,2,1 };
 	upper = high_threshold;
 	lower = low_threshold;
 
@@ -76,7 +97,7 @@ void CannyEdgeDetection::sobel() {
 	gaussian_blur.copyTo(grad_y);
 
 	//ma trận lưu hướng của biên cạnh
-	direction = Mat::zeros(Size(rows, cols), CV_32FC1);
+	direction = Mat::zeros(rows,cols, CV_32FC1);
 
 	//padding cho mỗi cạnh để thực hiện sobel
 	int padding_size = sobel_size / 2;
@@ -104,10 +125,7 @@ void CannyEdgeDetection::sobel() {
 				sx = 1e-7;
 			double angle = atan(sy / sx) * 180 / PI; //atan trả kết quả theo radian -> đổi về độ
 			direction.at<double>(i, j) = angle;
-
 		}
-
-
 }
 void CannyEdgeDetection::non_max_suppression() {
 	int rows = image.rows;
