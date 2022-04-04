@@ -33,7 +33,7 @@ private:
 public: 
 	CannyEdgeDetection(Mat source);
 	CannyEdgeDetection(Mat source, int low_threshold, int high_threshold);
-	void setFinalImage(Mat);
+	void setFinalImage(Mat&);
 	void grayscale();
 	void gaussianBlur();
 	void sobel();

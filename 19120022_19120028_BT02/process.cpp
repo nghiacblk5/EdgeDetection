@@ -43,34 +43,7 @@ uchar processPixel(int k) {
 	return uchar(k);
 }
 
-int detectByLaplace(Mat src, Mat &des) {
-	Mat gray_scale = BGR2Gray(src);
-	gray_scale.copyTo(des);
 
-	int mask[] = { 0,-1,0,
-			  -1, 4,-1,
-			   0,-1,0 };
-	int rows = src.rows;
-	int cols = src.cols;
-	for (int j = 1; j < rows - 1; ++j)
-		for (int i = 1; i < cols - 1; ++i)
-		{
-			int n = int(gray_scale.at<uchar>(j - 1, i)) * mask[1];
-			int s = int(gray_scale.at<uchar>(j + 1, i)) * mask[3];
-			int e = int(gray_scale.at<uchar>(j, i - 1)) * mask[5];
-			int w = int(gray_scale.at<uchar>(j, i + 1)) * mask[7];
-			int c = int(gray_scale.at<uchar>(j, i)) * mask[4];
-			int tmp = c + n + s + e + w;
-			if (tmp < 0) tmp *= -1;
-			if (tmp > 255)
-				tmp = 255;
-			/*else tmp = 0;*/
-			des.at<uchar>(j, i) = uchar(tmp);
-		}
-	if (!des.data)
-		return 0;
-	return 1;
-}
 
 
 

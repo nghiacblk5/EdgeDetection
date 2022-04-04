@@ -214,7 +214,6 @@ void CannyEdgeDetection::threshold() {
 			}
 
 		}
-	showImage(final_image, "Final image - MyCanny");
 }
 
 void CannyEdgeDetection::detect() {
@@ -224,12 +223,10 @@ void CannyEdgeDetection::detect() {
 	non_max_suppression();
 	threshold();
 
-	Mat dst;
-	Canny(image, dst, lower, upper);
-	showImage(dst, "OPENCV Canny");
+
 }
 
-void CannyEdgeDetection::setFinalImage(Mat src) {
+void CannyEdgeDetection::setFinalImage(Mat &src) {
 	final_image.copyTo(src);
 }
 
